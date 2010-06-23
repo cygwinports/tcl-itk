@@ -1,0 +1,9 @@
+category: Tcl
+requires: libgcc1 tcl tcl-itcl tcl-tk
+sdesc: "Object-Oriented extensions for Tk"
+ldesc: "[incr Tcl] is an object-oriented extension of the Tcl language. 
+It was created to support more structured programming in Tcl. [incr Tcl]
+introduces the notion of objects. Among other things, [incr Tcl] can be
+used to create new widgets that look and work like the usual Tk widgets,
+but are written entirely at the Tcl language level (C code is
+optional)."

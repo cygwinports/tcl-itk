@@ -1,5 +1,5 @@
 category: Tcl
-requires: libgcc1 tcl tcl-itcl tcl-tk
+requires: tcl tcl-itcl tcl-tk
 sdesc: "Object-Oriented extensions for Tk"
 ldesc: "[incr Tcl] is an object-oriented extension of the Tcl language. 
 It was created to support more structured programming in Tcl. [incr Tcl]

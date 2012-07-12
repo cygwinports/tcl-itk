@@ -1,0 +1,30 @@
+ORIG_PN="itk"
+inherit tcl
+
+DESCRIPTION="Object-oriented extensions for Tk"
+HOMEPAGE="http://incrtcl.sourceforge.net/"
+SRC_URI="mirror://sourceforge/incrtcl/${ORIG_PN}${PV}.tar.gz"
+SRC_DIR="${ORIG_PN}${PV%b*}"
+
+DISTCLEANFILES="aclocal.m4"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	cygconf
+	cygmake SHLIB_LD="\$(CC) -shared -Wl,--out-implib,\$@.a"
+}
+
+src_install() {
+	local slot=${PV_MAJ_MIN}
+
+	cd ${B}
+	cyginstall
+
+	insinto /usr/lib/itk${slot}
+	doins libitk${slot}.dll.a
+
+	mv ${D}/usr/lib/itk${slot}/libitk${slot}.dll ${D}/usr/bin
+	sed -i -e "s|\"\(libitk${slot}.dll\)\"|.. .. bin \1|" ${D}/usr/lib/itk${slot}/pkgIndex.tcl
+}

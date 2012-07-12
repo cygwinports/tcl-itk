@@ -1,9 +1,0 @@
-ORIG_PN="itk"
-inherit tcl
-
-DESCRIPTION="Object-oriented extensions for Tk"
-HOMEPAGE="http://incrtcl.sourceforge.net/"
-SRC_URI="mirror://sourceforge/incrtcl/${ORIG_PN}${PV}.tar.gz"
-SRC_DIR="${ORIG_PN}${PV%b*}"
-
-DISTCLEANFILES="aclocal.m4"

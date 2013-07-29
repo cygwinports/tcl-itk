@@ -1,0 +1,41 @@
+inherit tcl
+
+NAME="tcl-itk"
+VERSION=3.3
+RELEASE=2
+CATEGORY="Tcl"
+SUMMARY="Object-Oriented extensions for Tk"
+DESCRIPTION="[incr Tcl] is an object-oriented extension of the Tcl language.
+It was created to support more structured programming in Tcl. [incr Tcl]
+introduces the notion of objects. Among other things, [incr Tcl] can be
+used to create new widgets that look and work like the usual Tk widgets,
+but are written entirely at the Tcl language level (C code is optional)."
+HOMEPAGE="http://incrtcl.sourceforge.net/"
+SRC_URI="mirror://sourceforge/incrtcl/itk${VERSION}.tar.gz"
+SRC_DIR="itk${VERSION}"
+
+REQUIRES="tcl tcl-itcl tcl-tk"
+
+DISTCLEANFILES="aclocal.m4"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	cygconf
+	cygmake SHLIB_LD="\$(CC) -shared -Wl,--out-implib,\$@.a"
+}
+
+src_install() {
+	local vv=(${VERSION//./ })
+	local slot=${vv[0]}.${vv[1]}
+
+	cd ${B}
+	cyginstall
+
+	insinto /usr/lib/itk${slot}
+	doins libitk${slot}.dll.a
+
+	mv ${D}/usr/lib/itk${slot}/libitk${slot}.dll ${D}/usr/bin
+	sed -i -e "s|\"\(libitk${slot}.dll\)\"|.. .. bin \1|" ${D}/usr/lib/itk${slot}/pkgIndex.tcl
+}

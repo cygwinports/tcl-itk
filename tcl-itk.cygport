@@ -1,8 +1,8 @@
 inherit tcl
 
 NAME="tcl-itk"
-VERSION=3.3
-RELEASE=2
+VERSION=4.0.1
+RELEASE=1
 CATEGORY="Tcl"
 SUMMARY="Object-Oriented extensions for Tk"
 DESCRIPTION="[incr Tcl] is an object-oriented extension of the Tcl language.
@@ -14,28 +14,38 @@ HOMEPAGE="http://incrtcl.sourceforge.net/"
 SRC_URI="mirror://sourceforge/incrtcl/itk${VERSION}.tar.gz"
 SRC_DIR="itk${VERSION}"
 
-REQUIRES="tcl tcl-itcl tcl-tk"
+PKG_NAMES="${NAME} ${NAME}-devel"
+tcl_itk_REQUIRES="tcl tcl-itcl tcl-tk"
+tcl_itk_CONTENTS="
+	usr/bin/libitk4.0.1.dll
+	usr/lib/itk4.0.1/*.itk
+	usr/lib/itk4.0.1/*.tcl
+	usr/lib/itk4.0.1/tclIndex
+	usr/share/man/mann/
+"
+tcl_itk_devel_REQUIRES="tcl-devel tcl-tk-devel tcl-itcl-devel"
+tcl_itk_devel_CONTENTS="
+	usr/include/itk*.h
+	usr/lib/itk4.0.1/libitk4.0.1.dll.a
+"
 
-DISTCLEANFILES="aclocal.m4"
+#DISTCLEANFILES="aclocal.m4"
 
 src_compile() {
 	cd ${S}
 	cygautoreconf
 	cd ${B}
-	cygconf
+	cygconf --with-itcl=/usr/lib/itcl4.0.3
 	cygmake SHLIB_LD="\$(CC) -shared -Wl,--out-implib,\$@.a"
 }
 
 src_install() {
-	local vv=(${VERSION//./ })
-	local slot=${vv[0]}.${vv[1]}
-
 	cd ${B}
 	cyginstall
 
-	insinto /usr/lib/itk${slot}
-	doins libitk${slot}.dll.a
+	insinto /usr/lib/itk${VERSION}
+	doins libitk${VERSION}.dll.a
 
-	mv ${D}/usr/lib/itk${slot}/libitk${slot}.dll ${D}/usr/bin
-	sed -i -e "s|\"\(libitk${slot}.dll\)\"|.. .. bin \1|" ${D}/usr/lib/itk${slot}/pkgIndex.tcl
+	mv ${D}/usr/lib/itk${VERSION}/libitk${VERSION}.dll ${D}/usr/bin
+	sed -i -e "s|\"\(libitk${VERSION}.dll\)\"|.. .. bin \1|" ${D}/usr/lib/itk${VERSION}/pkgIndex.tcl
 }
